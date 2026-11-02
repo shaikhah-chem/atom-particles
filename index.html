@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>رحلة إلى قلب الذرة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+:root{
+  --bg:#f4f1ff; --bg2:#ebe5ff; --card:#ffffff; --ink:#1f1640; --muted:#6b6290; --line:#e2dcf7;
+  --pri:#6d28d9; --pri2:#8b5cf6; --pri-soft:#efe8ff;
+  --ok:#0f9f6e; --ok-soft:#e3f8ef; --bad:#dc3545; --bad-soft:#fde8ea; --warn:#d97706; --warn-soft:#fff4e0;
+  --p:#e5484d; --n:#7c8aa5; --e:#2f7cf6; --gold:#f5b100;
+  --r:20px; --shadow:0 8px 28px rgba(76,45,160,.12);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:'Tajawal',system-ui,sans-serif;background:radial-gradient(circle at 15% 0%,#fff 0,var(--bg) 45%,var(--bg2) 100%);color:var(--ink);min-height:100vh;font-size:18px;line-height:1.6}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:16px 16px 40px}
+.top{display:flex;align-items:center;gap:12px;padding:10px 0 14px}
+.logo{width:46px;height:46px;flex:none}
+.top h1{font-size:22px;margin:0;font-weight:800}
+.top .sub{font-size:13px;color:var(--muted)}
+.top .sp{flex:1}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:15px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.iconbtn{background:var(--card);border:1px solid var(--line);border-radius:999px;width:42px;height:42px;font-size:18px;color:var(--ink)}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:22px}
+.hidden{display:none!important}
+.btn{border:0;border-radius:14px;padding:14px 26px;font-size:19px;font-weight:700;background:var(--pri);color:#fff;box-shadow:0 6px 0 #4c1d95;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 3px 0 #4c1d95}
+.btn.ghost{background:var(--pri-soft);color:var(--pri);box-shadow:0 5px 0 #d8c9ff}
+.btn.ok{background:var(--ok);box-shadow:0 6px 0 #087653}
+.btn:disabled{opacity:.45;pointer-events:none}
+input,select{font-family:inherit;font-size:20px;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:#fff;color:var(--ink);width:100%}
+input:focus,select:focus{outline:none;border-color:var(--pri2)}
+label{font-weight:700;display:block;margin:12px 0 6px}
+
+/* login */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:center;margin-top:20px}
+.hero h2{font-size:34px;line-height:1.3;margin:0 0 8px}
+.hero p{color:var(--muted);margin:0 0 10px}
+.credit{font-size:14px;color:var(--muted);margin-top:14px}
+.atom-anim{width:100%;max-width:340px;display:block;margin:auto}
+.orbit{transform-origin:150px 150px;animation:spin 6s linear infinite}
+.orbit.o2{animation-duration:9s;animation-direction:reverse}
+.orbit.o3{animation-duration:12s}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* home */
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:start}
+.rules h3,.board h3,.sec-title{margin:0 0 12px;font-size:20px}
+.rule{display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:14px;background:#faf8ff;margin-bottom:8px;font-size:17px}
+.dot{width:16px;height:16px;border-radius:50%;flex:none}
+.dot.p{background:var(--p)} .dot.n{background:var(--n)} .dot.e{background:var(--e)}
+.formula{font-weight:800;color:var(--pri)}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.lvl{position:relative;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:16px 14px;text-align:right;box-shadow:var(--shadow);color:var(--ink);min-height:150px;display:flex;flex-direction:column;gap:4px}
+.lvl .num{width:38px;height:38px;border-radius:12px;background:var(--pri-soft);color:var(--pri);display:grid;place-items:center;font-weight:800}
+.lvl b{font-size:18px;margin-top:4px}
+.lvl small{color:var(--muted);font-size:14px;line-height:1.4}
+.lvl .stars{margin-top:auto;font-size:20px;letter-spacing:2px;color:#d8d2ee}
+.lvl .stars .on{color:var(--gold)}
+.lvl.locked{opacity:.55}
+.lvl.locked::after{content:"🔒";position:absolute;left:14px;top:14px;font-size:20px}
+.lvl.done{border-color:#c9b6ff}
+.board ol{margin:0;padding:0 22px 0 0}
+.board li{padding:6px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;gap:8px}
+.board li.me{color:var(--pri);font-weight:800}
+.muted{color:var(--muted)}
+.notation-demo{display:flex;align-items:center;justify-content:center;gap:16px;margin:8px 0 12px;flex-wrap:wrap}
+.nd-lbl{font-size:14px;line-height:1.5}
+
+/* notation */
+.nota{display:inline-flex;align-items:center;font-family:'Times New Roman',serif;direction:ltr;unicode-bidi:isolate;line-height:1}
+.nota .na{display:inline-flex;flex-direction:column;align-items:flex-end;font-size:.42em;margin-right:.06em;font-weight:700}
+.nota .na sup,.nota .na sub{line-height:1.05;vertical-align:baseline}
+.nota .na sup{color:#7c3aed}
+.nota .na sub{color:var(--p)}
+.nota .ns{font-weight:700}
+
+/* play */
+.playhead{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.bar{flex:1;height:14px;background:#e6e0fa;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pri2),var(--pri));border-radius:99px;transition:width .4s}
+.qcard{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:22px;align-items:center}
+.elcard{background:linear-gradient(160deg,#fff,#f6f2ff);border:2px solid var(--line);border-radius:22px;padding:18px;text-align:center}
+.elcard .big{font-size:96px}
+.elcard .nm{font-size:22px;font-weight:700;margin-top:6px}
+.elcard .kv{display:flex;flex-direction:column;gap:4px;margin-top:10px;font-size:16px}
+.elcard .kv span{background:#fff;border-radius:10px;padding:4px 8px;border:1px solid var(--line)}
+.prompt{font-size:24px;font-weight:700;margin:0 0 16px;line-height:1.5}
+.fields{display:grid;gap:12px}
+.field{display:flex;align-items:center;gap:12px}
+.field .fl{min-width:150px;font-weight:700;display:flex;align-items:center;gap:8px}
+.field input{max-width:180px;text-align:center;font-size:26px;font-weight:800;direction:ltr}
+.field input.right{border-color:var(--ok);background:var(--ok-soft)}
+.field input.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:16px;padding:16px;font-size:24px;font-weight:800;color:var(--ink);min-height:70px}
+.opt .nota{font-size:44px}
+.opt.sel{border-color:var(--pri2);background:var(--pri-soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+.fb{margin-top:18px;border-radius:16px;padding:16px 18px;font-size:18px;animation:pop .25s}
+.fb.ok{background:var(--ok-soft);border:2px solid #9fe3c6}
+.fb.bad{background:var(--bad-soft);border:2px solid #f5b5bc}
+.fb .h{font-weight:800;font-size:21px;margin-bottom:4px}
+.fb .tip{margin-top:8px;background:var(--warn-soft);border-radius:10px;padding:8px 12px;font-size:16px}
+.hintbox{margin-top:14px;background:#fffbea;border:2px dashed #f3d36b;border-radius:14px;padding:10px 14px;font-size:17px}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.pts{font-weight:800;color:var(--pri)}
+.streak{color:var(--warn);font-weight:800}
+
+/* build */
+.build{display:grid;grid-template-columns:minmax(240px,320px) 1fr;gap:20px;align-items:center}
+.buildsvg{width:100%;max-width:320px;display:block;margin:auto;background:radial-gradient(circle,#fff 0,#f3efff 70%);border-radius:50%}
+.ctr{display:flex;align-items:center;gap:10px;margin:8px 0}
+.ctr .fl{min-width:130px;font-weight:700;display:flex;align-items:center;gap:8px}
+.ctr button{width:52px;height:52px;border-radius:14px;border:2px solid var(--line);background:#fff;font-size:28px;font-weight:800;color:var(--ink)}
+.ctr output{min-width:56px;text-align:center;font-size:28px;font-weight:800}
+.target{font-size:72px;text-align:center}
+
+/* result */
+.result{text-align:center}
+.result .bigstars{font-size:64px;letter-spacing:8px;color:#ddd6f3}
+.result .bigstars .on{color:var(--gold);text-shadow:0 4px 0 #d79a00}
+.stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:16px 0}
+.stat{background:#faf8ff;border-radius:16px;padding:12px 20px;min-width:130px}
+.stat b{display:block;font-size:30px;color:var(--pri)}
+.mist{text-align:right;background:var(--warn-soft);border-radius:14px;padding:12px 16px;margin:12px auto;max-width:560px;font-size:16px}
+.mist ul{margin:6px 0 0;padding-right:20px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(31,22,64,.45);display:grid;place-items:center;padding:16px;z-index:40}
+.modal .card{max-width:560px;width:100%;max-height:90vh;overflow:auto}
+
+@media (max-width:760px){
+  body{font-size:17px}
+  .hero,.grid2,.qcard,.build{grid-template-columns:1fr}
+  .levels{grid-template-columns:1fr 1fr}
+  .hero h2{font-size:28px}
+  .elcard .big{font-size:76px}
+  .prompt{font-size:21px}
+  .field .fl{min-width:110px}
+  .opt .nota{font-size:36px}
+  .atom-anim{max-width:220px}
+}
+@media (max-width:420px){.levels{grid-template-columns:1fr}.opts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <header class="top">
+    <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#efe8ff"/><ellipse cx="50" cy="50" rx="38" ry="14" fill="none" stroke="#8b5cf6" stroke-width="3"/><ellipse cx="50" cy="50" rx="38" ry="14" fill="none" stroke="#8b5cf6" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="38" ry="14" fill="none" stroke="#8b5cf6" stroke-width="3" transform="rotate(120 50 50)"/><circle cx="46" cy="48" r="6" fill="#e5484d"/><circle cx="54" cy="52" r="6" fill="#7c8aa5"/><circle cx="88" cy="50" r="5" fill="#2f7cf6"/></svg>
+    <div><h1>رحلة إلى قلب الذرة</h1><div class="sub">حساب جسيمات الذرة من العدد الذري والعدد الكتلي</div></div>
+    <div class="sp"></div>
+    <span id="who" class="chip hidden"></span>
+    <span id="totalPts" class="chip hidden"></span>
+    <button id="soundBtn" class="iconbtn" title="الصوت" aria-label="تشغيل أو إيقاف الصوت">🔊</button>
+  </header>
+
+  <!-- ====== LOGIN ====== -->
+  <section id="scLogin">
+    <div class="hero">
+      <div class="card">
+        <h2>مرحبًا أيتها العالمة الصغيرة!</h2>
+        <p>ستدخلين إلى قلب الذرة، تعدّين بروتوناتها ونيوتروناتها وإلكتروناتها، ثم تبنين ذرّتك بنفسك. ست مراحل، نجوم ونقاط، ولوحة متصدرات لشعبتك.</p>
+        <label for="inName">اسمك الثلاثي</label>
+        <input id="inName" autocomplete="off" placeholder="مثال: نورة محمد العتيبي" maxlength="40">
+        <label for="inSec">شعبتك</label>
+        <select id="inSec"></select>
+        <div class="actions"><button id="goBtn" class="btn">ابدئي الرحلة ←</button></div>
+        <div id="loginErr" class="muted" style="color:var(--bad);margin-top:8px"></div>
+        <div class="credit">إعداد المعلمة: أ. شيخه المطيري · الثانوية الثانية والثلاثون بالقصيم</div>
+      </div>
+      <svg class="atom-anim" viewBox="0 0 300 300" aria-hidden="true">
+        <circle cx="150" cy="150" r="140" fill="#fff" opacity=".7"/>
+        <g class="orbit"><ellipse cx="150" cy="150" rx="125" ry="42" fill="none" stroke="#c4b5fd" stroke-width="3"/><circle cx="275" cy="150" r="10" fill="#2f7cf6"/></g>
+        <g class="orbit o2"><ellipse cx="150" cy="150" rx="125" ry="42" fill="none" stroke="#c4b5fd" stroke-width="3" transform="rotate(60 150 150)"/><circle cx="150" cy="150" r="10" fill="#2f7cf6" transform="rotate(60 150 150) translate(-125 0)"/></g>
+        <g class="orbit o3"><ellipse cx="150" cy="150" rx="125" ry="42" fill="none" stroke="#c4b5fd" stroke-width="3" transform="rotate(120 150 150)"/><circle cx="150" cy="150" r="10" fill="#2f7cf6" transform="rotate(120 150 150) translate(125 0)"/></g>
+        <circle cx="140" cy="142" r="14" fill="#e5484d"/><circle cx="162" cy="146" r="14" fill="#7c8aa5"/><circle cx="148" cy="164" r="14" fill="#7c8aa5"/><circle cx="166" cy="166" r="14" fill="#e5484d"/><circle cx="134" cy="162" r="14" fill="#e5484d"/><circle cx="152" cy="132" r="14" fill="#7c8aa5"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ====== HOME ====== -->
+  <section id="scHome" class="hidden">
+    <div class="grid2">
+      <div class="card rules">
+        <h3>مفاتيح الذرة</h3>
+        <div class="notation-demo">
+          <div class="nd-lbl" style="text-align:left">العدد الكتلي (A) ←<br><br>العدد الذري (Z) ←</div>
+          <span class="nota" style="font-size:88px"><span class="na"><sup>23</sup><sub>11</sub></span><span class="ns">Na</span></span>
+          <div class="nd-lbl">→ رمز العنصر</div>
+        </div>
+        <div class="rule"><span class="dot p"></span><div>عدد <b>البروتونات</b> = <span class="formula">العدد الذري (Z)</span></div></div>
+        <div class="rule"><span class="dot e"></span><div>في الذرة المتعادلة: عدد <b>الإلكترونات</b> = عدد البروتونات = <span class="formula">Z</span></div></div>
+        <div class="rule"><span class="dot n"></span><div>عدد <b>النيوترونات</b> = <span class="formula">العدد الكتلي − العدد الذري (A − Z)</span></div></div>
+        <div class="rule" style="background:#f3fbf7"><span style="font-weight:800">✦</span><div>العدد الكتلي = البروتونات + النيوترونات</div></div>
+      </div>
+      <div class="card board">
+        <h3>متصدرات شعبتي</h3>
+        <div id="boardBox" class="muted">…</div>
+      </div>
+    </div>
+    <h3 class="sec-title" style="margin-top:22px">مراحل الرحلة</h3>
+    <div id="levels" class="levels"></div>
+  </section>
+
+  <!-- ====== PLAY ====== -->
+  <section id="scPlay" class="hidden">
+    <div class="playhead">
+      <button id="quitBtn" class="iconbtn" title="رجوع" aria-label="رجوع">✕</button>
+      <span id="lvlName" class="chip"></span>
+      <div class="bar"><i id="barFill"></i></div>
+      <span id="qCount" class="chip"></span>
+      <span id="livePts" class="chip pts"></span>
+    </div>
+    <div class="card" id="qBox"></div>
+  </section>
+
+  <!-- ====== RESULT ====== -->
+  <section id="scResult" class="hidden">
+    <div class="card result" id="resBox"></div>
+  </section>
+</div>
+
+<div id="introModal" class="modal hidden"><div class="card" id="introBox"></div></div>
+
+<script>
+(function(){
+"use strict";
+const CFG = window.ATOM_CONFIG || {};
+const API = String(CFG.API_URL || "").trim();
+const SECTIONS = CFG.SECTIONS && CFG.SECTIONS.length ? CFG.SECTIONS : ["الشعبة 1","الشعبة 2","الشعبة 3"];
+
+/* ---------- storage (safe) ---------- */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+
+/* ---------- elements (most common isotope mass number) ---------- */
+const E = [
+ [1,"H","الهيدروجين",1],[2,"He","الهيليوم",4],[3,"Li","الليثيوم",7],[4,"Be","البيريليوم",9],[5,"B","البورون",11],
+ [6,"C","الكربون",12],[7,"N","النيتروجين",14],[8,"O","الأكسجين",16],[9,"F","الفلور",19],[10,"Ne","النيون",20],
+ [11,"Na","الصوديوم",23],[12,"Mg","المغنيسيوم",24],[13,"Al","الألومنيوم",27],[14,"Si","السيليكون",28],[15,"P","الفوسفور",31],
+ [16,"S","الكبريت",32],[17,"Cl","الكلور",35],[18,"Ar","الأرجون",40],[19,"K","البوتاسيوم",39],[20,"Ca","الكالسيوم",40],
+ [24,"Cr","الكروم",52],[25,"Mn","المنجنيز",55],[26,"Fe","الحديد",56],[27,"Co","الكوبالت",59],[28,"Ni","النيكل",58],
+ [29,"Cu","النحاس",63],[30,"Zn","الخارصين",64],[35,"Br","البروم",79],[38,"Sr","السترانشيوم",88],[47,"Ag","الفضة",107],
+ [53,"I","اليود",127],[56,"Ba","الباريوم",138],[79,"Au","الذهب",197],[82,"Pb","الرصاص",208]
+].map(([z,s,n,a]) => ({z, s, n, a}));
+const pool = (maxZ, minZ) => E.filter(e => e.z <= maxZ && e.z >= (minZ || 1));
+const rnd = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const N = el => el.a - el.z;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toNum(s){
+  s = String(s || "").trim().replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+  if(!/^\d{1,4}$/.test(s)) return null;
+  return parseInt(s, 10);
+}
+function nota(a, z, s){ return `<span class="nota"><span class="na"><sup>${a}</sup><sub>${z}</sub></span><span class="ns">${s}</span></span>`; }
+const notaEl = el => nota(el.a, el.z, el.s);
+function card(el, showKV){
+  return `<div class="elcard"><div class="big">${notaEl(el)}</div><div class="nm">${el.n}</div>` +
+    (showKV ? `<div class="kv"><span>العدد الذري = <b>${el.z}</b></span><span>العدد الكتلي = <b>${el.a}</b></span></div>` : "") + `</div>`;
+}
+function pickEls(list, k){ let out = []; while(out.length < k){ out = out.concat(shuffle(list)); } return out.slice(0, k); }
+
+/* ---------- misconception tags ---------- */
+const TAGS = {
+  p:"خطأ في عدد البروتونات", e:"خطأ في عدد الإلكترونات", n:"خطأ في عدد النيوترونات",
+  sum:"جمع العدد الكتلي والذري بدل الطرح", massAsN:"اعتبار العدد الكتلي هو عدد النيوترونات",
+  massAsP:"الخلط بين العدد الكتلي والعدد الذري", pnMix:"الخلط بين البروتونات والنيوترونات",
+  A:"خطأ في حساب العدد الكتلي", Z:"خطأ في تحديد العدد الذري", sym:"خطأ في تحديد العنصر أو رمزه",
+  total:"خطأ في حساب مجموع الجسيمات"
+};
+const TIPS = {
+  sum:"انتبهي: عدد النيوترونات = العدد الكتلي − العدد الذري (طرح وليس جمعًا).",
+  massAsN:"العدد الكتلي هو مجموع البروتونات والنيوترونات معًا، وليس النيوترونات وحدها.",
+  massAsP:"عدد البروتونات يساوي العدد الذري (الرقم السفلي)، وليس العدد الكتلي (الرقم العلوي).",
+  pnMix:"يبدو أنه حصل خلط بين البروتونات والنيوترونات. البروتونات = العدد الذري.",
+  A:"العدد الكتلي = عدد البروتونات + عدد النيوترونات.",
+  Z:"العدد الذري = عدد البروتونات = عدد الإلكترونات في الذرة المتعادلة.",
+  total:"اجمعي كل الجسيمات المطلوبة فقط: النواة فيها بروتونات ونيوترونات، والإلكترونات خارجها."
+};
+function classify(what, v, el){
+  if(what === "n"){ if(v === el.a + el.z) return "sum"; if(v === el.a) return "massAsN"; if(v === el.z) return "pnMix"; return "n"; }
+  if(what === "p" || what === "e" || what === "Z"){ if(v === el.a) return "massAsP"; if(v === N(el)) return "pnMix"; return what; }
+  if(what === "A"){ if(v === N(el)) return "massAsN"; if(v === el.z) return "massAsP"; return "A"; }
+  return what;
+}
+const LBL = {p:"البروتونات", e:"الإلكترونات", n:"النيوترونات", Z:"العدد الذري", A:"العدد الكتلي"};
+const DOT = {p:'<span class="dot p"></span>', e:'<span class="dot e"></span>', n:'<span class="dot n"></span>', Z:"", A:""};
+const HINT = {
+  p:"البروتونات = العدد الذري (الرقم السفلي في الرمز).",
+  e:"الذرة متعادلة: الإلكترونات = البروتونات = العدد الذري.",
+  n:"النيوترونات = العدد الكتلي (العلوي) − العدد الذري (السفلي).",
+  Z:"العدد الذري = عدد البروتونات.",
+  A:"العدد الكتلي = البروتونات + النيوترونات."
+};
+function explainFor(what, el){
+  if(what === "p") return `عدد البروتونات = العدد الذري = <b>${el.z}</b>`;
+  if(what === "e") return `الذرة متعادلة ⇐ عدد الإلكترونات = عدد البروتونات = العدد الذري = <b>${el.z}</b>`;
+  if(what === "n") return `عدد النيوترونات = العدد الكتلي − العدد الذري = ${el.a} − ${el.z} = <b>${N(el)}</b>`;
+  return "";
+}
+
+/* ---------- MC options ---------- */
+function numOptions(ans, distract){
+  const set = new Set([ans]);
+  for(const d of shuffle(distract)){ if(set.size >= 4) break; if(d >= 0 && d !== ans) set.add(d); }
+  let k = 1; while(set.size < 4){ const c = ans + (k % 2 ? k : -k); if(c >= 0) set.add(c); k++; }
+  return shuffle([...set]).map(v => ({v, html: String(v)}));
+}
+
+/* ---------- question builders ---------- */
+function qAsk(el, what, mc, showKV){
+  const ans = what === "n" ? N(el) : el.z;
+  const q = {
+    visual: card(el, showKV),
+    prompt: `كم عدد ${DOT[what]} <b>${LBL[what]}</b> في ذرة ${el.n}؟`,
+    fields: [{key: what, answer: ans}],
+    explain: explainFor(what, el),
+    hint: HINT[what],
+    classify: (key, v) => classify(key, v, el)
+  };
+  if(mc){ q.options = numOptions(ans, [el.z, el.a, N(el), el.a + el.z, ans + 1, Math.max(0, ans - 1)]); q.optKey = what; }
+  return q;
+}
+function qFull(el, showKV){
+  return {
+    visual: card(el, showKV),
+    prompt: `أكملي بطاقة هوية ذرة ${el.n}:`,
+    fields: [{key:"p", answer: el.z}, {key:"e", answer: el.z}, {key:"n", answer: N(el)}],
+    explain: `${explainFor("p", el)}<br>${explainFor("e", el)}<br>${explainFor("n", el)}`,
+    hint: "ابدئي بالرقم السفلي (العدد الذري)، ثم اطرحيه من الرقم العلوي.",
+    classify: (key, v) => classify(key, v, el)
+  };
+}
+function qReverse(el, v){
+  const n = N(el);
+  const mystery = `<div class="elcard"><div class="big"><span class="nota"><span class="na"><sup>?</sup><sub>?</sub></span><span class="ns">X</span></span></div><div class="nm">ذرة مجهولة</div></div>`;
+  if(v === 0) return {
+    visual: mystery,
+    prompt: `ذرة تحتوي نواتها على <b>${el.z}</b> بروتونًا و<b>${n}</b> نيوترونًا. ما عددها الذري وعددها الكتلي؟`,
+    fields: [{key:"Z", answer: el.z}, {key:"A", answer: el.a}],
+    explain: `العدد الذري = عدد البروتونات = <b>${el.z}</b><br>العدد الكتلي = البروتونات + النيوترونات = ${el.z} + ${n} = <b>${el.a}</b><br>إنها ذرة ${el.n} ${notaEl(el)}`,
+    hint: HINT.A, classify: (key, val) => classify(key, val, el)
+  };
+  if(v === 1) return {
+    visual: mystery,
+    prompt: `ذرة متعادلة فيها <b>${el.z}</b> إلكترونًا و<b>${n}</b> نيوترونًا. ما عددها الكتلي؟`,
+    fields: [{key:"A", answer: el.a}],
+    explain: `الإلكترونات = البروتونات = ${el.z}<br>العدد الكتلي = البروتونات + النيوترونات = ${el.z} + ${n} = <b>${el.a}</b>`,
+    hint: "حوّلي الإلكترونات إلى بروتونات أولًا (الذرة متعادلة)، ثم اجمعي النيوترونات.",
+    classify: (key, val) => classify(key, val, el)
+  };
+  if(v === 2){
+    const opts = [{v:"ok", html: notaEl(el)}];
+    const cand = [
+      {v:"w1", html: nota(n, el.z, el.s), ok: n !== el.a && n > 0},
+      {v:"w2", html: nota(el.z, el.a, el.s), ok: el.z !== el.a},
+      {v:"w3", html: nota(el.a + el.z, el.z, el.s), ok: true}
+    ];
+    const other = E.find(x => x.z === n && x.z !== el.z);
+    if(other) cand.push({v:"w4", html: notaEl(other), ok: true});
+    shuffle(cand).filter(c => c.ok).slice(0, 3).forEach(c => opts.push(c));
+    return {
+      visual: mystery,
+      prompt: `ذرة فيها <b>${el.z}</b> بروتونًا و<b>${n}</b> نيوترونًا. أيّ رمز يمثّلها بشكل صحيح؟`,
+      options: shuffle(opts), answer: "ok", optKey: "sym",
+      explain: `العدد الذري (السفلي) = ${el.z}، والعدد الكتلي (العلوي) = ${el.z} + ${n} = ${el.a} ⇐ ${notaEl(el)} (${el.n})`,
+      hint: "الرقم السفلي = البروتونات، والرقم العلوي = البروتونات + النيوترونات."
+    };
+  }
+  return {
+    visual: mystery,
+    prompt: `ذرة عددها الكتلي <b>${el.a}</b> وتحتوي نواتها على <b>${n}</b> نيوترونًا. ما عددها الذري؟`,
+    fields: [{key:"Z", answer: el.z}],
+    explain: `العدد الذري = العدد الكتلي − النيوترونات = ${el.a} − ${n} = <b>${el.z}</b> (ذرة ${el.n})`,
+    hint: "العدد الكتلي = البروتونات + النيوترونات، إذن البروتونات = العدد الكتلي − النيوترونات.",
+    classify: (key, val) => val === el.a + n ? "sum" : classify(key, val, el)
+  };
+}
+function qWord(el, v){
+  const n = N(el);
+  const plain = `<div class="elcard"><div class="big" style="font-size:70px">⚛</div><div class="nm">مسألة</div></div>`;
+  switch(v){
+    case 0: return { visual: plain,
+      prompt: `ذرة متعادلة عددها الكتلي <b>${el.a}</b>، وتحتوي نواتها على <b>${n}</b> نيوترونًا. كم إلكترونًا فيها؟`,
+      fields: [{key:"e", answer: el.z}],
+      explain: `البروتونات = العدد الكتلي − النيوترونات = ${el.a} − ${n} = ${el.z}<br>الذرة متعادلة ⇐ الإلكترونات = <b>${el.z}</b>`,
+      hint: "أوجدي البروتونات أولًا، ثم تذكّري أن الذرة متعادلة.",
+      classify: (key, val) => val === n ? "pnMix" : val === el.a ? "massAsP" : val === el.a + n ? "sum" : "e" };
+    case 1: return { visual: card(el, false),
+      prompt: `كم جسيمًا يوجد داخل <b>نواة</b> ذرة ${el.n}؟`,
+      fields: [{key:"total", answer: el.a}],
+      explain: `النواة تحتوي البروتونات والنيوترونات، ومجموعها = العدد الكتلي = ${el.z} + ${n} = <b>${el.a}</b>`,
+      hint: "ما الجسيمات الموجودة في النواة؟ وما العدد الذي يساوي مجموعها؟",
+      classify: () => "total" };
+    case 2: return { visual: plain,
+      prompt: `ذرة متعادلة فيها <b>${el.z}</b> بروتونًا و<b>${n}</b> نيوترونًا. ما <b>مجموع</b> جسيمات الذرة كلها (بروتونات + نيوترونات + إلكترونات)؟`,
+      fields: [{key:"total", answer: 2 * el.z + n}],
+      explain: `الإلكترونات = البروتونات = ${el.z}<br>المجموع = ${el.z} + ${n} + ${el.z} = <b>${2 * el.z + n}</b>`,
+      hint: "لا تنسي الإلكترونات! في الذرة المتعادلة عددها يساوي البروتونات.",
+      classify: () => "total" };
+    case 3: return { visual: plain,
+      prompt: `ذرة متعادلة فيها <b>${el.z}</b> إلكترونًا، وعددها الكتلي <b>${el.a}</b>. كم نيوترونًا فيها؟`,
+      fields: [{key:"n", answer: n}],
+      explain: `البروتونات = الإلكترونات = ${el.z}<br>النيوترونات = ${el.a} − ${el.z} = <b>${n}</b>`,
+      hint: HINT.n, classify: (key, val) => classify("n", val, el) };
+    case 4: {
+      const others = shuffle(E.filter(x => x.z !== el.z && Math.abs(x.z - el.z) <= 6)).slice(0, 3);
+      const opts = shuffle([{v:"ok", html: `${el.n} (${el.s})`}].concat(others.map((o, i) => ({v:"w" + i, html: `${o.n} (${o.s})`}))));
+      return { visual: plain,
+        prompt: `ذرة متعادلة عدد إلكتروناتها <b>${el.z}</b>. إلى أيّ عنصر تنتمي؟ (اعتمدي على العدد الذري)`,
+        options: opts, answer: "ok", optKey: "sym", optSmall: true,
+        explain: `الإلكترونات = البروتونات = العدد الذري = ${el.z} ⇐ العنصر هو <b>${el.n}</b> ${notaEl(el)}`,
+        hint: "العدد الذري هو هوية العنصر: كل عنصر له عدد بروتونات خاص به." };
+    }
+    default: {
+      let y = rnd(E.filter(x => N(x) !== n && Math.abs(x.z - el.z) <= 8 && x.z !== el.z));
+      if(!y) y = E[0];
+      const more = N(y) > n ? "y" : "x";
+      return { visual: plain,
+        prompt: `أيّ الذرتين تحتوي <b>نيوترونات أكثر</b>؟`,
+        options: shuffle([{v:"x", html: notaEl(el)}, {v:"y", html: notaEl(y)}]), answer: more, optKey: "n",
+        explain: `نيوترونات ${el.s} = ${el.a} − ${el.z} = ${n}<br>نيوترونات ${y.s} = ${y.a} − ${y.z} = ${N(y)}`,
+        hint: HINT.n };
+    }
+  }
+}
+function qBuild(el){ return { type:"build", el,
+  explain: `البروتونات = ${el.z}، النيوترونات = ${el.a} − ${el.z} = ${N(el)}، الإلكترونات = ${el.z}`,
+  hint: "ابدئي بالبروتونات من الرقم السفلي، ثم الإلكترونات بالعدد نفسه، ثم النيوترونات = العلوي − السفلي." }; }
+
+/* ---------- levels ---------- */
+const LEVELS = [
+  { id:1, name:"عدّاد البروتونات والإلكترونات", desc:"اقرئي العدد الذري واحسبي البروتونات والإلكترونات.",
+    intro:"العدد الذري (الرقم السفلي) هو عدد البروتونات. وفي الذرة المتعادلة عدد الإلكترونات يساوي عدد البروتونات.",
+    gen(){ const els = pickEls(pool(20), 8); return els.map((el, i) => qAsk(el, i % 2 ? "e" : "p", i % 3 === 1, i < 4)); } },
+  { id:2, name:"صيّادة النيوترونات", desc:"اطرحي العدد الذري من العدد الكتلي.",
+    intro:"العدد الكتلي (الرقم العلوي) = البروتونات + النيوترونات. إذن: النيوترونات = العدد الكتلي − العدد الذري.",
+    gen(){ const els = pickEls(pool(30, 2), 8); return els.map((el, i) => qAsk(el, "n", i % 3 === 2, i < 3)); } },
+  { id:3, name:"بطاقة هوية الذرة", desc:"احسبي الجسيمات الثلاثة معًا من الرمز.",
+    intro:"الآن الجسيمات الثلاثة معًا: البروتونات = Z، الإلكترونات = Z، النيوترونات = A − Z.",
+    gen(){ const els = pickEls(pool(90, 3), 8); return els.map((el, i) => qFull(el, i < 2)); } },
+  { id:4, name:"المحققة: من الجسيمات إلى الرمز", desc:"اعكسي الطريق: من الجسيمات إلى العدد الذري والكتلي.",
+    intro:"إذا عرفتِ الجسيمات تستطيعين كتابة الرمز: Z = البروتونات، A = البروتونات + النيوترونات.",
+    gen(){ const els = pickEls(pool(30, 2), 8); const vs = shuffle([0,0,1,1,2,2,3,3]); return els.map((el, i) => qReverse(el, vs[i])); } },
+  { id:5, name:"مسائل العالمات", desc:"مسائل كلامية متنوعة تحتاج تفكيرًا وخطوتين.",
+    intro:"اقرئي المعطيات جيدًا، وحدّدي المطلوب، ثم اختاري القاعدة المناسبة. بعض المسائل تحتاج خطوتين.",
+    gen(){ const els = pickEls(pool(56, 2), 8); const vs = shuffle([0,1,2,3,4,5,0,3]); return els.map((el, i) => qWord(el, vs[i])); } },
+  { id:6, name:"ابني الذرة", desc:"أضيفي الجسيمات بنفسك لتبني الذرة المطلوبة.",
+    intro:"انظري إلى الرمز، واحسبي الجسيمات، ثم استخدمي أزرار + و − لبناء الذرة. البروتونات حمراء، والنيوترونات رمادية، والإلكترونات زرقاء.",
+    gen(){ return pickEls(pool(12, 2), 5).map(qBuild); } }
+];
+
+/* ---------- state ---------- */
+let student = store.get("atom_student", null);
+let progress = {};
+let S = null; // play state
+let soundOn = store.get("atom_sound", true);
+const $ = id => document.getElementById(id);
+function show(id){ ["scLogin","scHome","scPlay","scResult"].forEach(s => $(s).classList.toggle("hidden", s !== id)); window.scrollTo(0, 0); }
+const pKey = () => "atom_prog_" + (student ? student.name + "|" + student.section : "");
+function totalPoints(){ return Object.values(progress).reduce((s, p) => s + (p.points || 0), 0); }
+
+/* ---------- sound ---------- */
+let AC = null;
+function beep(type){
+  if(!soundOn) return;
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const seq = type === "ok" ? [[660,.09],[880,.14]] : type === "bad" ? [[260,.18]] : [[523,.1],[659,.1],[784,.1],[1047,.25]];
+    let t = AC.currentTime;
+    seq.forEach(([f, d]) => { const o = AC.createOscillator(), g = AC.createGain(); o.type = type === "bad" ? "triangle" : "sine"; o.frequency.value = f; g.gain.setValueAtTime(.18, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + .02); t += d; });
+  }catch(e){}
+}
+function syncSoundBtn(){ $("soundBtn").textContent = soundOn ? "🔊" : "🔇"; }
+$("soundBtn").onclick = () => { soundOn = !soundOn; store.set("atom_sound", soundOn); syncSoundBtn(); };
+syncSoundBtn();
+
+/* ---------- network ---------- */
+function logLocal(p){ const l = store.get("atom_log", []); l.push(p); if(l.length > 2000) l.splice(0, l.length - 2000); store.set("atom_log", l); }
+function post(p){
+  if(!API) return Promise.resolve(false);
+  return fetch(API, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(p) })
+    .then(() => true).catch(() => false);
+}
+function send(p){
+  p.t = new Date().toISOString(); p.name = student.name; p.section = student.section; p.sid = student.sid;
+  logLocal(p);
+  post(p).then(ok => { if(!ok && API){ const q = store.get("atom_queue", []); q.push(p); store.set("atom_queue", q); } });
+}
+async function flushQueue(){
+  const q = store.get("atom_queue", []); if(!q.length || !API) return;
+  const rest = [];
+  for(const p of q){ if(!(await post(p))) rest.push(p); }
+  store.set("atom_queue", rest);
+}
+
+/* ---------- login ---------- */
+$("inSec").innerHTML = SECTIONS.map(s => `<option>${esc(s)}</option>`).join("");
+function login(){
+  const name = $("inName").value.replace(/\s+/g, " ").trim();
+  if(name.split(" ").length < 2 || name.length < 5){ $("loginErr").textContent = "اكتبي اسمك الثلاثي من فضلك حتى تظهر نتيجتك للمعلمة."; return; }
+  const section = $("inSec").value;
+  const sid = (student && student.name === name && student.section === section) ? student.sid : Math.random().toString(36).slice(2, 10);
+  student = {name, section, sid};
+  store.set("atom_student", student);
+  send({event:"دخول"});
+  enterHome();
+}
+$("goBtn").onclick = login;
+$("inName").addEventListener("keydown", e => { if(e.key === "Enter") login(); });
+
+function enterHome(){
+  progress = store.get(pKey(), {});
+  $("who").textContent = "👩‍🔬 " + student.name.split(" ")[0] + " · " + student.section;
+  $("who").classList.remove("hidden");
+  updatePts();
+  renderLevels();
+  loadBoard();
+  show("scHome");
+}
+function updatePts(){ $("totalPts").textContent = "★ " + totalPoints() + " نقطة"; $("totalPts").classList.remove("hidden"); }
+$("who").onclick = () => { if(confirm("تغيير الطالبة؟")){ show("scLogin"); $("inName").value = ""; } };
+
+function unlocked(i){ return CFG.UNLOCK_ALL || i === 0 || (progress[LEVELS[i - 1].id] && progress[LEVELS[i - 1].id].stars >= 1); }
+function starsHtml(n){ return [1,2,3].map(k => `<span class="${k <= n ? "on" : ""}">★</span>`).join(""); }
+function renderLevels(){
+  $("levels").innerHTML = LEVELS.map((L, i) => {
+    const p = progress[L.id]; const open = unlocked(i);
+    return `<button class="lvl ${open ? "" : "locked"} ${p && p.stars ? "done" : ""}" data-i="${i}" ${open ? "" : "aria-disabled=true"}>
+      <span class="num">${L.id}</span><b>${L.name}</b><small>${L.desc}</small>
+      <span class="stars">${starsHtml(p ? p.stars : 0)}</span></button>`;
+  }).join("");
+  $("levels").querySelectorAll(".lvl").forEach(b => b.onclick = () => {
+    const i = +b.dataset.i;
+    if(!unlocked(i)){ b.animate([{transform:"translateX(0)"},{transform:"translateX(6px)"},{transform:"translateX(-6px)"},{transform:"translateX(0)"}], {duration:300}); return; }
+    openIntro(i);
+  });
+}
+function loadBoard(){
+  const box = $("boardBox");
+  if(!API){ box.innerHTML = `<p class="muted">مجموع نقاطك: <b class="pts">${totalPoints()}</b></p><p class="muted" style="font-size:14px">ستظهر لوحة المتصدرات بعد ربط الموقع بجدول النتائج.</p>`; return; }
+  box.textContent = "جارٍ التحميل…";
+  fetch(API + "?action=board&section=" + encodeURIComponent(student.section)).then(r => r.json()).then(d => {
+    const list = (d && d.board) || [];
+    if(!list.length){ box.innerHTML = `<p class="muted">كوني أول من يتصدّر شعبتها!</p>`; return; }
+    box.innerHTML = "<ol>" + list.map(r => `<li class="${r.name === student.name ? "me" : ""}"><span>${esc(r.name)}</span><span>${r.points} ★</span></li>`).join("") + "</ol>";
+  }).catch(() => { box.innerHTML = `<p class="muted">تعذّر تحميل المتصدرات الآن. مجموع نقاطك: <b class="pts">${totalPoints()}</b></p>`; });
+}
+
+/* ---------- intro modal ---------- */
+function openIntro(i){
+  const L = LEVELS[i];
+  $("introBox").innerHTML = `<h3 style="margin-top:0">المرحلة ${L.id}: ${L.name}</h3>
+    <p style="background:var(--pri-soft);border-radius:14px;padding:12px 14px">💡 ${L.intro}</p>
+    <p class="muted" style="font-size:16px">الإجابة الصحيحة = 10 نقاط، ومع التلميح = 5 نقاط، و3 إجابات متتالية صحيحة تمنحك نقاطًا إضافية.</p>
+    <div class="actions"><button class="btn" id="startLvl">ابدئي</button><button class="btn ghost" id="cancelLvl">لاحقًا</button></div>`;
+  $("introModal").classList.remove("hidden");
+  $("startLvl").onclick = () => { $("introModal").classList.add("hidden"); startLevel(i); };
+  $("cancelLvl").onclick = () => $("introModal").classList.add("hidden");
+}
+
+/* ---------- play engine ---------- */
+function startLevel(i){
+  const L = LEVELS[i];
+  S = { li: i, L, qs: L.gen(), qi: 0, correct: 0, points: 0, streak: 0, tags: {}, hints: 0, t0: Date.now(), wrongList: [] };
+  $("lvlName").textContent = "المرحلة " + L.id;
+  show("scPlay");
+  renderQ();
+}
+function hud(){
+  $("qCount").textContent = (S.qi + 1) + " / " + S.qs.length;
+  $("barFill").style.width = (S.qi / S.qs.length * 100) + "%";
+  $("livePts").textContent = "★ " + S.points + (S.streak >= 3 ? `  🔥${S.streak}` : "");
+}
+function renderQ(){
+  hud();
+  const q = S.qs[S.qi]; q.usedHint = false; q.done = false;
+  if(q.type === "build") return renderBuild(q);
+  let ans = "";
+  if(q.options){
+    ans = `<div class="opts">${q.options.map(o => `<button class="opt" data-v="${o.v}" ${q.optSmall ? 'style="font-size:20px"' : ""}>${o.html}</button>`).join("")}</div>`;
+  } else {
+    ans = `<div class="fields">${q.fields.map(f => `<div class="field"><span class="fl">${DOT[f.key] || ""}${LBL[f.key] || (f.key === "total" ? "العدد" : "")}</span><input inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-k="${f.key}" aria-label="${LBL[f.key] || "الإجابة"}"></div>`).join("")}</div>`;
+  }
+  $("qBox").innerHTML = `<div class="qcard"><div>${q.visual}</div><div>
+      <p class="prompt">${q.prompt}</p>${ans}
+      <div id="hintArea"></div>
+      <div class="actions" id="acts"><button class="btn" id="checkBtn" ${q.options ? "disabled" : ""}>تحقّقي</button><button class="btn ghost" id="hintBtn">💡 تلميح</button></div>
+      <div id="fbArea"></div></div></div>`;
+  if(q.options){
+    $("qBox").querySelectorAll(".opt").forEach(b => b.onclick = () => {
+      if(q.done) return;
+      $("qBox").querySelectorAll(".opt").forEach(x => x.classList.remove("sel"));
+      b.classList.add("sel"); q.sel = b.dataset.v; $("checkBtn").disabled = false;
+    });
+  } else {
+    const ins = $("qBox").querySelectorAll("input");
+    ins.forEach((inp, k) => inp.addEventListener("keydown", e => { if(e.key === "Enter"){ if(k < ins.length - 1) ins[k + 1].focus(); else check(); } }));
+    setTimeout(() => { if(window.innerWidth > 760) ins[0].focus(); }, 50);
+  }
+  $("checkBtn").onclick = check;
+  $("hintBtn").onclick = () => showHint(q);
+}
+function showHint(q){
+  if(q.done || q.usedHint) return;
+  q.usedHint = true; S.hints++;
+  $("hintArea").innerHTML = `<div class="hintbox">💡 ${q.hint}</div>`;
+  $("hintBtn").disabled = true;
+}
+function addTag(t){ S.tags[t] = (S.tags[t] || 0) + 1; }
+function check(){
+  const q = S.qs[S.qi]; if(q.done) return;
+  let ok = true, tags = [], correctTxt = "";
+  if(q.options){
+    if(q.sel == null) return;
+    const right = q.answer != null ? q.answer : String(q.fields[0].answer);
+    ok = q.sel === String(right);
+    $("qBox").querySelectorAll(".opt").forEach(b => { if(b.dataset.v === String(right)) b.classList.add("right"); else if(b.dataset.v === q.sel) b.classList.add("wrong"); });
+    if(!ok){
+      if(q.classify && q.optKey) tags.push(q.classify(q.optKey, +q.sel)); else tags.push(q.optKey || "sym");
+      correctTxt = q.options.find(o => o.v === String(right)).html;
+    }
+  } else {
+    const ins = [...$("qBox").querySelectorAll("input")];
+    const vals = ins.map(i => toNum(i.value));
+    if(vals.some(v => v === null)){ ins.forEach((i, k) => { if(vals[k] === null) i.classList.add("wrong"); }); flash("اكتبي رقمًا في كل خانة 🙂"); setTimeout(() => ins.forEach(i => i.classList.remove("wrong")), 900); return; }
+    q.fields.forEach((f, k) => {
+      const good = vals[k] === f.answer;
+      ins[k].classList.add(good ? "right" : "wrong"); ins[k].readOnly = true;
+      if(!good){ ok = false; tags.push(q.classify ? q.classify(f.key, vals[k]) : f.key); }
+    });
+    if(!ok) correctTxt = q.fields.map(f => (q.fields.length > 1 ? (LBL[f.key] || "") + " = " : "") + f.answer).join("، ");
+  }
+  finishQ(q, ok, tags, correctTxt);
+}
+function flash(msg){ $("fbArea").innerHTML = `<div class="fb bad" style="padding:10px 14px">${msg}</div>`; setTimeout(() => { if(!S.qs[S.qi].done) $("fbArea").innerHTML = ""; }, 1400); }
+function finishQ(q, ok, tags, correctTxt){
+  q.done = true;
+  let gained = 0;
+  if(ok){
+    S.correct++; S.streak++;
+    gained = q.usedHint ? 5 : 10;
+    if(S.streak >= 3) gained += 2;
+    S.points += gained; beep("ok");
+  } else {
+    S.streak = 0; tags.forEach(addTag); beep("bad");
+    S.wrongList.push(tags);
+  }
+  const tipTag = tags.find(t => TIPS[t]);
+  const praise = rnd(["أحسنتِ!","رائع يا عالمة!","إجابة دقيقة!","ممتاز!","تفكير علمي سليم!"]);
+  $("fbArea").innerHTML = `<div class="fb ${ok ? "ok" : "bad"}">
+     <div class="h">${ok ? "✔ " + praise + ` <span class="pts">+${gained}</span>` : "✘ ليست صحيحة هذه المرة"}</div>
+     ${ok ? "" : `<div>الإجابة الصحيحة: <b>${correctTxt}</b></div>`}
+     <div style="margin-top:6px">${q.explain}</div>
+     ${tipTag ? `<div class="tip">⚠ ${TIPS[tipTag]}</div>` : ""}
+   </div>`;
+  $("acts").innerHTML = `<button class="btn ${ok ? "ok" : ""}" id="nextBtn">${S.qi < S.qs.length - 1 ? "السؤال التالي ←" : "عرض النتيجة"}</button>`;
+  $("nextBtn").onclick = next; $("nextBtn").focus();
+  hud();
+}
+function next(){ S.qi++; if(S.qi >= S.qs.length) return endLevel(); renderQ(); }
+$("quitBtn").onclick = () => { if(confirm("الخروج من المرحلة؟ لن تُحفظ هذه المحاولة.")){ enterHome(); } };
+
+/* ---------- build the atom ---------- */
+function atomSVG(p, n, e){
+  const cx = 160, cy = 160, parts = [];
+  const total = p + n, seq = [];
+  let pi = 0, ni = 0;
+  for(let k = 0; k < total; k++){ if((k % 2 === 0 && pi < p) || ni >= n){ seq.push("p"); pi++; } else { seq.push("n"); ni++; } }
+  const rr = total > 14 ? 7.5 : 9;
+  seq.forEach((t, k) => { const ang = k * 2.39996, rad = (rr * 0.95) * Math.sqrt(k + .4); parts.push(`<circle cx="${(cx + rad * Math.cos(ang)).toFixed(1)}" cy="${(cy + rad * Math.sin(ang)).toFixed(1)}" r="${rr}" fill="${t === "p" ? "#e5484d" : "#7c8aa5"}" stroke="#fff" stroke-width="1.5"/>`); });
+  const shells = [2, 8, 8, 18], radii = [70, 102, 134, 150]; let left = e, rings = "";
+  for(let s = 0; s < shells.length && (left > 0 || s === 0); s++){
+    const c = Math.min(left, shells[s]); left -= c;
+    rings += `<circle cx="${cx}" cy="${cy}" r="${radii[s]}" fill="none" stroke="#c4b5fd" stroke-dasharray="4 5" stroke-width="2"/>`;
+    let dots = "";
+    for(let k = 0; k < c; k++){ const a = (k / c) * Math.PI * 2 - Math.PI / 2; dots += `<circle cx="${(cx + radii[s] * Math.cos(a)).toFixed(1)}" cy="${(cy + radii[s] * Math.sin(a)).toFixed(1)}" r="7" fill="#2f7cf6" stroke="#fff" stroke-width="1.5"/>`; }
+    rings += `<g class="orbit" style="transform-origin:${cx}px ${cy}px;animation-duration:${10 + s * 5}s">${dots}</g>`;
+  }
+  return `<svg class="buildsvg" viewBox="0 0 320 320" role="img" aria-label="نموذج الذرة">${rings}${parts.join("")}</svg>`;
+}
+function renderBuild(q){
+  q.cnt = {p:0, n:0, e:0};
+  const el = q.el;
+  $("qBox").innerHTML = `<div class="build"><div id="svgBox">${atomSVG(0,0,0)}</div><div>
+    <p class="prompt">ابني ذرة ${el.n} المتعادلة:</p>
+    <div class="target">${notaEl(el)}</div>
+    ${["p","n","e"].map(k => `<div class="ctr"><span class="fl">${DOT[k]}${LBL[k]}</span><button data-k="${k}" data-d="-1" aria-label="إنقاص">−</button><output id="o_${k}">0</output><button data-k="${k}" data-d="1" aria-label="زيادة">+</button></div>`).join("")}
+    <div id="hintArea"></div>
+    <div class="actions" id="acts"><button class="btn" id="checkBtn">تحقّقي من ذرّتي</button><button class="btn ghost" id="hintBtn">💡 تلميح</button></div>
+    <div id="fbArea"></div></div></div>`;
+  $("qBox").querySelectorAll(".ctr button").forEach(b => b.onclick = () => {
+    if(q.done) return;
+    const k = b.dataset.k; q.cnt[k] = Math.max(0, Math.min(30, q.cnt[k] + (+b.dataset.d)));
+    $("o_" + k).textContent = q.cnt[k];
+    $("svgBox").innerHTML = atomSVG(q.cnt.p, q.cnt.n, q.cnt.e);
+  });
+  $("hintBtn").onclick = () => showHint(q);
+  $("checkBtn").onclick = () => {
+    if(q.done) return;
+    const want = {p: el.z, n: N(el), e: el.z}, tags = [];
+    ["p","n","e"].forEach(k => { const ok = q.cnt[k] === want[k]; $("o_" + k).style.color = ok ? "var(--ok)" : "var(--bad)"; if(!ok) tags.push(classify(k, q.cnt[k], el)); });
+    finishQ(q, tags.length === 0, tags, `بروتونات ${want.p}، نيوترونات ${want.n}، إلكترونات ${want.e}`);
+  };
+}
+
+/* ---------- end of level ---------- */
+function endLevel(){
+  const L = S.L, total = S.qs.length, acc = Math.round(S.correct / total * 100);
+  const stars = acc >= 90 ? 3 : acc >= 70 ? 2 : acc >= 50 ? 1 : 0;
+  const secs = Math.round((Date.now() - S.t0) / 1000);
+  const prev = progress[L.id] || {};
+  progress[L.id] = { stars: Math.max(stars, prev.stars || 0), points: Math.max(S.points, prev.points || 0), acc: Math.max(acc, prev.acc || 0), tries: (prev.tries || 0) + 1 };
+  store.set(pKey(), progress);
+  send({ event:"مرحلة", level: L.id, correct: S.correct, total, points: S.points, stars, seconds: secs, hints: S.hints, errors: S.tags });
+  $("barFill").style.width = "100%";
+  const tagList = Object.entries(S.tags).sort((a, b) => b[1] - a[1]);
+  const nextOpen = L.id < LEVELS.length && stars >= 1;
+  const msg = stars === 3 ? "مذهل! أتقنتِ هذه المهارة 🎉" : stars === 2 ? "عمل رائع! قليل من التدريب وتصلين للقمة." : stars === 1 ? "اجتزتِ المرحلة! أعيديها لتحصدي نجومًا أكثر." : "لا بأس، التعلّم محاولات. راجعي المفاتيح وأعيدي المرحلة.";
+  $("resBox").innerHTML = `<h2 style="margin:0">المرحلة ${L.id}: ${L.name}</h2>
+    <div class="bigstars">${starsHtml(stars)}</div>
+    <p style="font-size:20px;font-weight:700">${msg}</p>
+    <div class="stats">
+      <div class="stat"><b>${S.correct}/${total}</b>إجابات صحيحة</div>
+      <div class="stat"><b>${acc}%</b>الدقة</div>
+      <div class="stat"><b>${S.points}</b>نقطة</div>
+      <div class="stat"><b>${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}</b>الوقت</div>
+    </div>
+    ${tagList.length ? `<div class="mist"><b>ركّزي في المرة القادمة على:</b><ul>${tagList.map(([t, c]) => `<li>${TAGS[t] || t} (${c})</li>`).join("")}</ul></div>` : ""}
+    <div class="actions" style="justify-content:center">
+      ${nextOpen ? `<button class="btn ok" id="rNext">المرحلة التالية ←</button>` : ""}
+      <button class="btn ${nextOpen ? "ghost" : ""}" id="rAgain">إعادة المرحلة</button>
+      <button class="btn ghost" id="rHome">خريطة المراحل</button>
+    </div>
+    ${L.id === LEVELS.length && stars >= 2 ? `<p style="margin-top:16px;font-size:20px">🏅 أنهيتِ الرحلة كاملة! أنتِ الآن خبيرة في جسيمات الذرة.</p>` : ""}`;
+  show("scResult");
+  if(stars >= 2){ beep("win"); confetti(); }
+  $("rAgain").onclick = () => startLevel(S.li);
+  $("rHome").onclick = enterHome;
+  if(nextOpen) $("rNext").onclick = () => { progress = store.get(pKey(), {}); openIntro(S.li + 1); };
+}
+
+/* ---------- confetti ---------- */
+function confetti(){
+  const c = $("confetti"), x = c.getContext("2d");
+  c.width = innerWidth; c.height = innerHeight;
+  const cols = ["#e5484d","#2f7cf6","#f5b100","#8b5cf6","#0f9f6e"];
+  const ps = Array.from({length: 140}, () => ({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * .5, r: 4 + Math.random() * 5, vy: 2 + Math.random() * 3, vx: -1.5 + Math.random() * 3, c: rnd(cols) }));
+  let f = 0;
+  (function tick(){
+    x.clearRect(0, 0, c.width, c.height);
+    ps.forEach(p => { p.x += p.vx; p.y += p.vy; x.fillStyle = p.c; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 7); x.fill(); });
+    if(++f < 200) requestAnimationFrame(tick); else x.clearRect(0, 0, c.width, c.height);
+  })();
+}
+
+/* ---------- boot ---------- */
+flushQueue();
+if(student){ $("inName").value = student.name; $("inSec").value = student.section; }
+window.__atom = { LEVELS, E, N, toNum, state: () => S }; // for testing
+})();
+</script>
+</body>
+</html>
