@@ -133,6 +133,7 @@ label{font-weight:700;display:block;margin:12px 0 6px}
 .stat b{display:block;font-size:30px;color:var(--pri)}
 .mist{text-align:right;background:var(--warn-soft);border-radius:14px;padding:12px 16px;margin:12px auto;max-width:560px;font-size:16px}
 .mist ul{margin:6px 0 0;padding-right:20px}
+.sitecredit{text-align:center;margin-top:26px;font-size:15px;font-weight:700;color:var(--muted)}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
 
 /* modal */
@@ -229,6 +230,7 @@ label{font-weight:700;display:block;margin:12px 0 6px}
   <section id="scResult" class="hidden">
     <div class="card result" id="resBox"></div>
   </section>
+  <footer class="sitecredit">إعداد المعلمة: أ. شيخه المطيري</footer>
 </div>
 
 <div id="introModal" class="modal hidden"><div class="card" id="introBox"></div></div>
@@ -535,7 +537,7 @@ function enterHome(){
 function updatePts(){ $("totalPts").textContent = "★ " + totalPoints() + " نقطة"; $("totalPts").classList.remove("hidden"); }
 $("who").onclick = () => { if(confirm("تغيير الطالبة؟")){ show("scLogin"); $("inName").value = ""; } };
 
-function unlocked(i){ return CFG.UNLOCK_ALL || i === 0 || (progress[LEVELS[i - 1].id] && progress[LEVELS[i - 1].id].stars >= 1); }
+function unlocked(i){ return CFG.UNLOCK_ALL || i === 0 || LEVELS[i].id === 6 || (progress[LEVELS[i - 1].id] && progress[LEVELS[i - 1].id].stars >= 1); }
 function starsHtml(n){ return [1,2,3].map(k => `<span class="${k <= n ? "on" : ""}">★</span>`).join(""); }
 function renderLevels(){
   $("levels").innerHTML = LEVELS.map((L, i) => {
